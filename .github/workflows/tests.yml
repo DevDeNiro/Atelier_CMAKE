@@ -29,17 +29,17 @@ jobs:
         run: mkdir build
 
       - name: Change to Build Directory
-        working-directory: ${{ github.workspace }}
+        working-directory: ${{ github.workspaces }}
         run: cd build
 
       - name: Configure CMake Project
-        working-directory: ${{ github.workspace }}/build
+        working-directory: ${{ github.workspaces }}/build
         run: cmake ..
 
       - name: Build Project
-        working-directory: ${{ github.workspace }}/build
+        working-directory: ${{ github.workspaces }}/build
         run: cmake --build .
 
       - name: Run Test
-        working-directory: ${{ github.workspace }}/build
+        working-directory: ${{ github.workspaces }}/build
         run: ctest -R ${{ matrix.test }}
