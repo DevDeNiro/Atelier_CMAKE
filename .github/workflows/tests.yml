@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up CMake
         uses: lukka/get-cmake@v3.21.1
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Add Test
         run: |
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Sub Test
         run: |
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Mul Test
         run: |
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Div Test
         run: |
@@ -79,3 +79,16 @@ jobs:
           cd build
           cmake ..
           ctest -R t4
+  Test_Square:
+    needs: Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Square Test
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          ctest -R t5
