@@ -1,0 +1,16 @@
+# Dossier de build
+build/
+
+# Fichiers temporaires et de backup
+*~
+*.swp
+
+# Dossiers spécifiques à l'IDE
+.vscode/
+.idea/
+
+# Autres fichiers générés
+*.o
+*.a
+*.so
+*.exe
