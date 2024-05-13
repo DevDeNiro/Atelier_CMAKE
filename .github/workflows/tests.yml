@@ -3,21 +3,8 @@ name: Automatisation des tests
 on: push
 
 jobs:
-  setup:
+  Compilation:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - name: Set up job matrix
-        id: set-matrix
-        run: echo "::set-output name=matrix::[\"t1\", \"t2\", \"t3\", \"t4\", \"t5\"]"
-
-  test:
-    needs: setup
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        test: ${{fromJson(needs.setup.outputs.matrix)}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -29,17 +16,66 @@ jobs:
         run: mkdir build
 
       - name: Change to Build Directory
-        working-directory: ${{ github.workspaces }}
         run: cd build
 
       - name: Configure CMake Project
-        working-directory: ${{ github.workspaces }}/build
         run: cmake ..
 
       - name: Build Project
-        working-directory: ${{ github.workspaces }}/build
         run: cmake --build .
 
-      - name: Run Test
-        working-directory: ${{ github.workspaces }}/build
-        run: ctest -R ${{ matrix.test }}
+  Test_Add:
+    needs: Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Add Test
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          ctest -R t1
+
+  Test_Sub:
+    needs: Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Sub Test
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          ctest -R t2
+
+  Test_Mul:
+    needs: Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Mul Test
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          ctest -R t3
+
+  Test_Div:
+    needs: Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Div Test
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          ctest -R t4
