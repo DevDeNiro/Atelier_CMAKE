@@ -1,16 +1,45 @@
 name: Automatisation des tests
+
 on: push
+
 jobs:
-  Compilation:
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - name: Compilation
-        run: |
-          last_directory=$(basename ${{ runner.workspace }})
-          git clone https://github.com/${{ github.repository }}.git
-          cd ./$last_directory
-          mkdir build
-          cd build
-          cmake ..
-          make
-          make test
+      - name: Set up job matrix
+        id: set-matrix
+        run: echo "::set-output name=matrix::[\"t1\", \"t2\", \"t3\", \"t4\", \"t5\"]"
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test: ${{fromJson(needs.setup.outputs.matrix)}}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@v3.21.1
+
+      - name: Create Build Directory
+        run: mkdir build
+
+      - name: Change to Build Directory
+        working-directory: ${{ github.workspace }}
+        run: cd build
+
+      - name: Configure CMake Project
+        working-directory: ${{ github.workspace }}/build
+        run: cmake ..
+
+      - name: Build Project
+        working-directory: ${{ github.workspace }}/build
+        run: cmake --build .
+
+      - name: Run Test
+        working-directory: ${{ github.workspace }}/build
+        run: ctest -R ${{ matrix.test }}
